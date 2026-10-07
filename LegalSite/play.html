@@ -29,6 +29,29 @@
       <a class="button button-secondary support-button" href="https://ko-fi.com/hustlicong" target="_blank" rel="noopener">Support MeowPlay</a>
     </section>
 
+    <section class="translator-panel" aria-labelledby="translator-title">
+      <div>
+        <p class="eyebrow">Just for fun</p>
+        <h2 id="translator-title">Turn a phrase into a cat sound.</h2>
+        <p class="translator-copy">Type what you want to say. MeowPlay will make a playful sound choice based on the mood of your words.</p>
+      </div>
+      <form id="translator-form" class="translator-form">
+        <label for="human-phrase">What do you want to say?</label>
+        <div class="translator-input-row">
+          <input id="human-phrase" name="phrase" type="text" maxlength="120" placeholder="e.g. Come here, little friend" autocomplete="off" required>
+          <button class="button button-primary" type="submit">Make it meow</button>
+        </div>
+      </form>
+      <div class="translator-result" id="translator-result" aria-live="polite">
+        <span class="result-label">Playful interpretation</span>
+        <strong id="translator-message">Your cat sound will appear here.</strong>
+        <button class="play-button result-play" id="translator-play" type="button" hidden>
+          <span aria-hidden="true">▶</span><span>Play cat sound</span>
+        </button>
+      </div>
+      <p class="translator-disclaimer">This is entertainment, not a real animal-language translation. Cats may respond differently.</p>
+    </section>
+
     <div class="play-toolbar" aria-label="Soundboard controls">
       <div class="category-tabs" id="category-tabs"></div>
       <button class="icon-button" id="favorites-toggle" type="button" aria-pressed="false" title="Show favorites">

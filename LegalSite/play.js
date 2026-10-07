@@ -10,6 +10,10 @@ const grid = document.querySelector("#sound-grid");
 const tabs = document.querySelector("#category-tabs");
 const statusLine = document.querySelector("#status-line");
 const favoritesToggle = document.querySelector("#favorites-toggle");
+const translatorForm = document.querySelector("#translator-form");
+const translatorMessage = document.querySelector("#translator-message");
+const translatorPlay = document.querySelector("#translator-play");
+let translatedCard = null;
 
 function saveFavorites() {
   localStorage.setItem("meowplay-favorites", JSON.stringify([...state.favorites]));
@@ -76,6 +80,23 @@ function playCard(card) {
   });
 }
 
+function chooseTranslation(phrase) {
+  const text = phrase.toLowerCase();
+  const rules = [
+    { words: ["come", "here", "过来", "来", "跟我"], categories: ["Come Here"], titles: ["Come Here", "Follow Me", "This Way, Friend"] },
+    { words: ["play", "玩", "游戏", "fun", "玩耍"], categories: ["Play Time"], titles: ["Play With Me"] },
+    { words: ["food", "eat", "dinner", "snack", "饭", "吃", "饿", "零食"], categories: ["Food Time"], titles: ["Snack Time", "Dinner Is Ready"] },
+    { words: ["love", "cute", "hug", "cuddle", "爱", "可爱", "抱", "摸"], categories: ["Affection"], titles: ["I'm Mom", "You Are So Cute", "Cuddle With Me"] },
+    { words: ["look", "listen", "hear", "attention", "看", "听", "注意"], categories: ["Attention"], titles: ["Look at Me", "Can You Hear Me?", "A Little Attention"] },
+    { words: ["what", "who", "curious", "什么", "谁", "好奇"], categories: ["Curious & Social"], titles: ["What's That?"] }
+  ];
+  const rule = rules.find((candidate) => candidate.words.some((word) => text.includes(word)));
+  const candidates = rule
+    ? state.cards.filter((card) => rule.categories.includes(card.category) || rule.titles.includes(card.title))
+    : state.cards.filter((card) => card.safetyTag === "gentle" || card.safetyTag === "neutral");
+  return candidates[Math.floor(Math.random() * candidates.length)] || state.cards[0];
+}
+
 tabs.addEventListener("click", (event) => {
   const button = event.target.closest("[data-category]");
   if (!button) return;
@@ -90,6 +111,20 @@ favoritesToggle.addEventListener("click", () => {
   favoritesToggle.classList.toggle("is-active", state.favoritesOnly);
   setStatus(state.favoritesOnly ? "Showing your favorites." : "Showing all sounds.");
   renderCards();
+});
+
+translatorForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const phrase = new FormData(translatorForm).get("phrase").trim();
+  if (!phrase || !state.cards.length) return;
+  translatedCard = chooseTranslation(phrase);
+  translatorMessage.textContent = `“${phrase}” becomes “${translatedCard.title}” in playful cat-sound mode.`;
+  translatorPlay.hidden = false;
+  setStatus("A playful interpretation is ready.");
+});
+
+translatorPlay.addEventListener("click", () => {
+  if (translatedCard) playCard(translatedCard);
 });
 
 grid.addEventListener("click", (event) => {
