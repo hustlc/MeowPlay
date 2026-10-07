@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Play gentle MeowPlay cat sounds from your phone.">
+  <link rel="icon" href="app-icon.png" type="image/png">
+  <title>Play — MeowPlay</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="play-page">
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Main navigation">
+      <a class="brand" href="index.html"><img src="app-icon.png" alt=""> <span>MeowPlay</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="support.html">Support</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell play-main">
+    <section class="play-heading">
+      <div>
+        <p class="eyebrow">A little soundboard</p>
+        <h1>Choose a moment.</h1>
+        <p class="play-lede">Start quietly, play once, and let your cat decide whether to stay.</p>
+      </div>
+      <a class="button button-secondary support-button" href="support.html">Support MeowPlay</a>
+    </section>
+
+    <div class="play-toolbar" aria-label="Soundboard controls">
+      <div class="category-tabs" id="category-tabs"></div>
+      <button class="icon-button" id="favorites-toggle" type="button" aria-pressed="false" title="Show favorites">
+        <span aria-hidden="true">♡</span><span class="sr-only">Show favorites</span>
+      </button>
+    </div>
+
+    <p class="status-line" id="status-line" role="status">Ready when you are.</p>
+    <section class="sound-grid" id="sound-grid" aria-live="polite"></section>
+
+    <section class="play-note">
+      <strong>Comfort comes first.</strong>
+      <span>Keep volume low and stop if your cat moves away, hides, flattens their ears, or seems uncomfortable.</span>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <span>© 2026 vista intelligence. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </div>
+    </div>
+  </footer>
+  <script src="play.js"></script>
+</body>
+</html>

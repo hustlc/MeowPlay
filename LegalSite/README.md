@@ -2,6 +2,9 @@
 
 `LegalSite` is the static website for MeowPlay, including the official homepage, Privacy Policy, Terms of Use, and Support page. It is prepared for Cloudflare Pages and does not require a server or database.
 
+`play.html` is the browser soundboard. It loads the 19 launch sounds from
+`audio/` and keeps favorites in the visitor's browser with local storage.
+
 ## Important
 
 `https://gogo-9eq.pages.dev/` is an existing Go-learning site and must not be replaced or reused for MeowPlay. Create a separate Cloudflare Pages project, preferably named `meowplay-official`.
