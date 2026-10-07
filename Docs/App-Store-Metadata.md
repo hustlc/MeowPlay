@@ -18,12 +18,15 @@ MeowPlay is a playful soundboard made for curious cats and the people who love t
 
 Choose a friendly intent such as “Come Here,” “I’m Mom,” or “Play With Me,” play a gentle cat sound once, and observe your cat’s response. Save favorite sounds, organize Premium playlists, and record simple reactions in a private journal stored on your device.
 
+Use Cat Translator to turn a short human phrase into a playful cat-sound choice. It is a mood-based entertainment feature, not a literal animal-language translation.
+
 FREE FEATURES
 
 - Six free launch sounds across the current catalog
 - Up to three favorites
 - Your seven most recent plays
 - Simple cat-response notes
+- Playful phrase-to-sound suggestions
 - No account, ads, microphone, or tracking
 
 MEOWPLAY PREMIUM

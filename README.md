@@ -1,6 +1,6 @@
 # MeowPlay
 
-An iOS 17 SwiftUI app for playful, clearly non-literal cat-sound interactions. The app is offline-first, has no account system, requests no sensitive permissions, and uses StoreKit 2 for Premium access.
+An iOS 17 SwiftUI app for playful, clearly non-literal cat-sound interactions. The iPhone app is the primary product; the Cloudflare Pages site is a lightweight preview and discovery channel. The app is offline-first, has no account system, requests no sensitive permissions, and uses StoreKit 2 for Premium access.
 
 ## Requirements
 
@@ -49,6 +49,13 @@ Create one auto-renewable subscription group in App Store Connect with these pro
 - `com.meowplay.premium.annual` — US$29.99/year, 7-day introductory trial
 
 The in-app price is always read from StoreKit; it is never hard-coded. Complete the subscription localization, review screenshot, Privacy Policy URL, Terms URL, and review notes before submission.
+
+## Cat Translator
+
+The native app includes a local `Cat Translator` tab. It maps common words and
+phrases to a playful sound-card choice without claiming to translate animal
+language. Input stays on the device; no speech, microphone, network, or AI
+service is required.
 
 ## Release blockers
 

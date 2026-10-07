@@ -23,8 +23,8 @@ struct OnboardingView: View {
 
                 OnboardingPage(
                     icon: "hand.raised.fill",
-                    title: "Fun, Not Translation",
-                    message: AppConfiguration.disclaimer
+                    title: "Playful, Not Literal",
+                    message: "Turn a phrase into a playful cat-sound choice. It is entertainment, not a real animal-language translation."
                 )
                 .tag(2)
             }
@@ -78,4 +78,3 @@ private struct OnboardingPage: View {
         }
     }
 }
-

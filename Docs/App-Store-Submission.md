@@ -3,6 +3,7 @@
 ## Positioning
 
 - Name and subtitle describe a cat soundboard or playful interaction app, not a literal translator.
+- Cat Translator is described as a playful phrase-to-sound suggestion feature, never as accurate animal-language translation.
 - Description and screenshots show real screens and state that results vary by cat.
 - Do not use “your cat understands,” “scientifically proven,” “guaranteed,” diagnostic, treatment, or training-effect claims.
 - Review notes explain that all cards are playful human intent labels attached to licensed sounds, not translations.
@@ -29,4 +30,3 @@
 - Test VoiceOver, Dynamic Type, dark mode, silent mode, headphones, Bluetooth route changes, phone-call interruptions, airplane mode, and fresh installs.
 - Exercise monthly and annual purchase, new-customer annual trial, ineligible annual purchase, pending approval, cancelation, expiration, grace period, billing retry, refund/revocation, and Restore Purchases.
 - Ensure free playback works without purchase or connectivity and that the paywall is not forced at launch.
-

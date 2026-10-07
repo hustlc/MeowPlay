@@ -23,6 +23,9 @@ private struct MainTabView: View {
             CatalogView()
                 .tabItem { Label("Sounds", systemImage: "waveform") }
 
+            PhraseTranslatorView()
+                .tabItem { Label("Translate", systemImage: "character.bubble") }
+
             FavoritesView()
                 .tabItem { Label("Favorites", systemImage: "heart.fill") }
 
@@ -34,4 +37,3 @@ private struct MainTabView: View {
         }
     }
 }
-
