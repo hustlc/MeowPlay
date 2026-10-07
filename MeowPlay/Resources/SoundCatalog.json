@@ -1,0 +1,192 @@
+[
+  {
+    "id": "im_mom",
+    "title": "I'm Mom",
+    "category": "Affection",
+    "tier": "free",
+    "safetyTag": "gentle",
+    "assetName": "cat_affection_good_baby_01.m4a",
+    "sortOrder": 1,
+    "contentVersion": 1
+  },
+  {
+    "id": "youre_mom",
+    "title": "You're Mom",
+    "category": "Affection",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_affection_good_baby_02.m4a",
+    "sortOrder": 2,
+    "contentVersion": 1
+  },
+  {
+    "id": "i_love_you_cat",
+    "title": "I Love You, Cat",
+    "category": "Affection",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_affection_good_baby_03.m4a",
+    "sortOrder": 3,
+    "contentVersion": 1
+  },
+  {
+    "id": "you_are_so_cute",
+    "title": "You Are So Cute",
+    "category": "Affection",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_affection_so_cute_01.m4a",
+    "sortOrder": 4,
+    "contentVersion": 1
+  },
+  {
+    "id": "cuddle_with_me",
+    "title": "Cuddle With Me",
+    "category": "Affection",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_affection_cuddle_01.m4a",
+    "sortOrder": 5,
+    "contentVersion": 1
+  },
+  {
+    "id": "look_at_me",
+    "title": "Look at Me",
+    "category": "Attention",
+    "tier": "free",
+    "safetyTag": "neutral",
+    "assetName": "cat_attention_look_at_me_01.m4a",
+    "sortOrder": 6,
+    "contentVersion": 1
+  },
+  {
+    "id": "hey_over_here",
+    "title": "Hey, Over Here",
+    "category": "Attention",
+    "tier": "premium",
+    "safetyTag": "neutral",
+    "assetName": "cat_attention_over_here_01.m4a",
+    "sortOrder": 7,
+    "contentVersion": 1
+  },
+  {
+    "id": "can_you_hear_me",
+    "title": "Can You Hear Me?",
+    "category": "Attention",
+    "tier": "premium",
+    "safetyTag": "neutral",
+    "assetName": "cat_attention_hear_me_01.m4a",
+    "sortOrder": 8,
+    "contentVersion": 1
+  },
+  {
+    "id": "gentle_attention",
+    "title": "A Little Attention",
+    "category": "Attention",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_attention_gentle_01.m4a",
+    "sortOrder": 9,
+    "contentVersion": 1
+  },
+  {
+    "id": "one_more_meow",
+    "title": "One More Meow",
+    "category": "Attention",
+    "tier": "premium",
+    "safetyTag": "neutral",
+    "assetName": "cat_attention_one_more_meow_01.m4a",
+    "sortOrder": 10,
+    "contentVersion": 1
+  },
+  {
+    "id": "come_here",
+    "title": "Come Here",
+    "category": "Come Here",
+    "tier": "free",
+    "safetyTag": "gentle",
+    "assetName": "cat_come_here_touch_01.m4a",
+    "sortOrder": 11,
+    "contentVersion": 1
+  },
+  {
+    "id": "follow_me",
+    "title": "Follow Me",
+    "category": "Come Here",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_come_here_touch_02.m4a",
+    "sortOrder": 12,
+    "contentVersion": 1
+  },
+  {
+    "id": "join_me_here",
+    "title": "Join Me Here",
+    "category": "Come Here",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_come_here_touch_03.m4a",
+    "sortOrder": 13,
+    "contentVersion": 1
+  },
+  {
+    "id": "this_way_friend",
+    "title": "This Way, Friend",
+    "category": "Come Here",
+    "tier": "premium",
+    "safetyTag": "gentle",
+    "assetName": "cat_come_here_this_way_01.m4a",
+    "sortOrder": 14,
+    "contentVersion": 1
+  },
+  {
+    "id": "come_sniff_this",
+    "title": "Come Sniff This",
+    "category": "Come Here",
+    "tier": "premium",
+    "safetyTag": "neutral",
+    "assetName": "cat_come_here_sniff_this_01.m4a",
+    "sortOrder": 15,
+    "contentVersion": 1
+  },
+  {
+    "id": "snack_time",
+    "title": "Snack Time",
+    "category": "Food Time",
+    "tier": "free",
+    "safetyTag": "neutral",
+    "assetName": "cat_food_snack_time_01.m4a",
+    "sortOrder": 16,
+    "contentVersion": 1
+  },
+  {
+    "id": "dinner_is_ready",
+    "title": "Dinner Is Ready",
+    "category": "Food Time",
+    "tier": "premium",
+    "safetyTag": "neutral",
+    "assetName": "cat_food_dinner_ready_01.m4a",
+    "sortOrder": 17,
+    "contentVersion": 1
+  },
+  {
+    "id": "play_with_me",
+    "title": "Play With Me",
+    "category": "Play Time",
+    "tier": "free",
+    "safetyTag": "gentle",
+    "assetName": "cat_play_play_with_me_01.m4a",
+    "sortOrder": 18,
+    "contentVersion": 1
+  },
+  {
+    "id": "whats_that",
+    "title": "What's That?",
+    "category": "Curious & Social",
+    "tier": "free",
+    "safetyTag": "neutral",
+    "assetName": "cat_curiosity_whats_that_01.m4a",
+    "sortOrder": 19,
+    "contentVersion": 1
+  }
+]
