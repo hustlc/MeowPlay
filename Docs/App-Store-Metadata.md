@@ -38,6 +38,8 @@ Subscriptions are available monthly or annually. Eligible customers may receive 
 
 MeowPlay is designed for entertainment and enrichment. It does not translate animal language or provide veterinary or behavioral advice. Cats may respond differently. Begin at low volume and stop if your cat seems uncomfortable.
 
+The current browser preview and voluntary support page are available at the official MeowPlay website and Ko-fi page. Tips are optional and do not unlock paid app features.
+
 ## Keywords
 
 cat sounds,meow,soundboard,kitten,cat play,pet journal,cat reaction,purr
