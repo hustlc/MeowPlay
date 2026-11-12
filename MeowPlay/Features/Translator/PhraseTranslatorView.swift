@@ -1,13 +1,18 @@
+import SwiftData
 import SwiftUI
 
 struct PhraseTranslatorView: View {
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var catalog: CatalogStore
     @EnvironmentObject private var audioPlayer: AudioPlayer
+    @EnvironmentObject private var entitlements: EntitlementStore
+    @AppStorage("didAcknowledgeSoundSafety") private var didAcknowledgeSafety = false
+    @AppStorage("successfulPlayCount") private var successfulPlayCount = 0
     @State private var phrase = ""
     @State private var translation: PhraseTranslation?
     @State private var localError: String?
-    @State private var didAcknowledgeSafety = false
     @State private var isShowingSafetyAlert = false
+    @State private var isShowingPaywall = false
 
     private let translator = PhraseTranslator()
 
@@ -27,7 +32,7 @@ struct PhraseTranslatorView: View {
                 Button("Cancel", role: .cancel) {}
                 Button("Play Once") {
                     didAcknowledgeSafety = true
-                    playTranslation()
+                    requestPlay()
                 }
             } message: {
                 Text("This is a playful sound choice, not a real translation. Stop playback if your cat seems uncomfortable.")
@@ -36,6 +41,9 @@ struct PhraseTranslatorView: View {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(localError ?? "Please try again.")
+            }
+            .sheet(isPresented: $isShowingPaywall) {
+                PaywallView()
             }
         }
     }
@@ -97,12 +105,19 @@ struct PhraseTranslatorView: View {
                     Button {
                         requestPlay()
                     } label: {
-                        Image(systemName: audioPlayer.playingSoundID == translation.card.id ? "stop.fill" : "play.fill")
+                        Image(systemName: playButtonImage(for: translation.card))
                             .font(.title2)
                             .frame(width: 48, height: 48)
                     }
                     .buttonStyle(.borderedProminent)
-                    .accessibilityLabel(audioPlayer.playingSoundID == translation.card.id ? "Stop sound" : "Play cat sound")
+                    .disabled(audioPlayer.cooldownSoundID == translation.card.id && audioPlayer.playingSoundID != translation.card.id)
+                    .accessibilityLabel(playButtonLabel(for: translation.card))
+                    .accessibilityHint("Plays once and never loops")
+                }
+                if translation.card.isPremium && !entitlements.hasPremium {
+                    Label("Premium sound. Unlock MeowPlay Premium to play this result.", systemImage: "lock.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
             .padding()
@@ -134,13 +149,21 @@ struct PhraseTranslatorView: View {
     }
 
     private func translate() {
-        translation = translator.translate(phrase, cards: catalog.cards)
+        translation = translator.translate(
+            phrase,
+            cards: catalog.cards,
+            prefersFreeCards: !entitlements.hasPremium
+        )
     }
 
     private func requestPlay() {
         guard let translation else { return }
         if audioPlayer.playingSoundID == translation.card.id {
             audioPlayer.stop()
+        } else if audioPlayer.cooldownSoundID == translation.card.id {
+            return
+        } else if translation.card.isPremium && !entitlements.hasPremium {
+            isShowingPaywall = true
         } else if didAcknowledgeSafety {
             playTranslation()
         } else {
@@ -148,10 +171,33 @@ struct PhraseTranslatorView: View {
         }
     }
 
+    private func playButtonImage(for card: SoundCard) -> String {
+        if audioPlayer.playingSoundID == card.id {
+            return "stop.fill"
+        }
+        return card.isPremium && !entitlements.hasPremium ? "lock.fill" : "play.fill"
+    }
+
+    private func playButtonLabel(for card: SoundCard) -> String {
+        if audioPlayer.playingSoundID == card.id {
+            return "Stop sound"
+        }
+        return card.isPremium && !entitlements.hasPremium
+            ? "Unlock Premium to play sound"
+            : "Play cat sound"
+    }
+
     private func playTranslation() {
         guard let translation, audioPlayer.play(translation.card) else {
             localError = audioPlayer.errorMessage ?? "The audio could not be played."
             return
         }
+        modelContext.insert(PlaybackEntry(soundID: translation.card.id))
+        do {
+            try modelContext.save()
+        } catch {
+            localError = "Your local journal could not be saved."
+        }
+        successfulPlayCount += 1
     }
 }

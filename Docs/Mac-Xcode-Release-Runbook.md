@@ -23,20 +23,36 @@ This project is ready for Mac-side build, StoreKit testing, and App Store Connec
 - A unique bundle identifier. The placeholder is `com.meowplay.app`; change it if unavailable.
 - Apple development team ID in `project.yml`.
 
-## Windows + Xcode Cloud Path
+## No-Mac Path (Windows + GitHub Actions)
 
-A Mac is not required for the initial build if the project is connected to
-Xcode Cloud. Push this repository to GitHub, create an Xcode Cloud workflow for
-the `MeowPlay` scheme, and let `ci_scripts/ci_post_clone.sh` install XcodeGen
-when needed and generate the Xcode project from `project.yml`. Use the iPhone
-with TestFlight for the final real-device checks.
+A local Mac is not required for either verification or release builds.
+GitHub-hosted macOS runners provide Xcode, and everything is configured from
+the browser.
 
-The repository must be a complete URL such as
-`https://github.com/<account-or-organization>/<repository>.git`; a GitHub
-username alone is not enough. Never place a GitHub password, personal access
-token, signing certificate, or provisioning profile in the repository.
+1. `hustlc/MeowPlay` is already a public GitHub repository, so standard hosted
+   runner minutes are free. Commit the working-tree changes and push to `main`.
+2. `.github/workflows/ios-build.yml` then runs automatically: it installs
+   XcodeGen, generates `MeowPlay.xcodeproj`, and builds plus runs all unit tests
+   on an iOS Simulator with `CODE_SIGNING_ALLOWED=NO`. This is the first real
+   Swift compile. Read the Actions log before going further.
+3. For a TestFlight build, add a release workflow that archives with signing and
+   uploads using an App Store Connect API key (`-allowProvisioningUpdates`), or
+   a Distribution certificate plus provisioning profile stored as GitHub
+   Secrets. Never commit certificates, private keys, or API keys.
+4. Fill in `DEVELOPMENT_TEAM` in `project.yml` and reserve the bundle ID before
+   attempting a signed archive.
+5. Install TestFlight on the iPhone and work through the checklist below.
 
-Install XcodeGen if needed:
+Apple Developer Program membership is still required for signing, TestFlight,
+and App Store distribution. In mainland China an individual can enrol for
+¥688/year from the Apple Developer app on the iPhone; no Mac is needed.
+
+`ci_scripts/ci_post_clone.sh` is kept for a future Xcode Cloud setup, but Apple
+requires the first Xcode Cloud workflow to be configured in Xcode on a Mac. It
+is not the primary path on a Windows-only setup. If a Mac is borrowed or rented
+briefly, Xcode Cloud (25 free compute hours/month) becomes an alternative.
+
+Install XcodeGen if needed on the runner or on a Mac:
 
 ```zsh
 brew install xcodegen
@@ -120,6 +136,9 @@ Before submission, verify this with Xcode's privacy report and the final depende
 - Fresh install and first-run onboarding.
 - Free playback without purchase.
 - Locked Premium card opens paywall.
+- Cat Translator returns a playable free sound for a free user.
+- Cat Translator result locked to Premium shows a lock and opens the paywall.
+- Cat Translator playback appears in the Journal and counts toward the Premium banner.
 - Monthly purchase.
 - Annual purchase with trial.
 - Restore Purchases.
@@ -133,7 +152,7 @@ Before submission, verify this with Xcode's privacy report and the final depende
 
 ## Current Known Blockers
 
-- This Windows environment cannot run Xcode build or iOS simulator tests.
+- Xcode cannot run locally on Windows. Real compilation and unit-test results now come from `.github/workflows/ios-build.yml` on a GitHub-hosted macOS runner; check the Actions tab before release.
 - `project.yml` still has an empty `DEVELOPMENT_TEAM`.
 - Bundle ID `com.meowplay.app` must be reserved or replaced in App Store Connect.
 - App Store screenshots still need to be captured from a real Xcode build.

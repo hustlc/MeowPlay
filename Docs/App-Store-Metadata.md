@@ -51,7 +51,7 @@ cat sounds,meow,soundboard,kitten,cat play,pet journal,cat reaction,purr
 
 MeowPlay is an entertainment soundboard, not an animal-language translator. The English card titles describe playful human intents; they do not claim literal semantic meaning.
 
-Six cards are free in the current launch catalog. To reach the Premium paywall, open any card marked with a lock or tap “See Premium options” in Settings. Restore Purchases and Manage Subscription are both under Settings > Premium.
+Six cards are free in the current launch catalog. To reach the Premium paywall, open any card marked with a lock, tap “See Premium options” in Settings, or use Cat Translator on a phrase that maps to a Premium sound. Free users normally receive a playable free suggestion from Cat Translator. Restore Purchases and Manage Subscription are both under Settings > Premium.
 
 No login is required. The app does not request microphone, camera, location, contacts, or tracking permission. Favorites, playlists, playback history, and reaction entries remain on device.
 

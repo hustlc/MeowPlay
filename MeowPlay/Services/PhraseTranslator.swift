@@ -7,11 +7,43 @@ struct PhraseTranslation {
 }
 
 struct PhraseTranslator {
-    func translate(_ phrase: String, cards: [SoundCard]) -> PhraseTranslation? {
+    /// Maps a short human phrase to a playful, clearly non-literal sound choice.
+    ///
+    /// - Parameter prefersFreeCards: pass `true` for free users. Intent matching
+    ///   then runs against the free library first, so the suggested result is
+    ///   normally playable. If the free library has no card for that intent,
+    ///   the full library is used and the UI presents the locked Premium result.
+    func translate(
+        _ phrase: String,
+        cards: [SoundCard],
+        prefersFreeCards: Bool = false
+    ) -> PhraseTranslation? {
         let trimmed = phrase.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, !cards.isEmpty else { return nil }
 
         let normalized = trimmed.lowercased()
+        var pools: [[SoundCard]] = [cards]
+        if prefersFreeCards {
+            let freeCards = cards.filter { !$0.isPremium }
+            if !freeCards.isEmpty {
+                pools.insert(freeCards, at: 0)
+            }
+        }
+
+        for pool in pools {
+            if let match = matchedIntent(for: normalized, in: pool) {
+                return PhraseTranslation(phrase: trimmed, card: match.card, mood: match.mood)
+            }
+        }
+
+        guard let fallback = gentleFallback(in: cards) else { return nil }
+        return PhraseTranslation(phrase: trimmed, card: fallback, mood: "a gentle cat-sound guess")
+    }
+
+    private func matchedIntent(
+        for normalized: String,
+        in cards: [SoundCard]
+    ) -> (card: SoundCard, mood: String)? {
         let rules: [(words: [String], category: SoundCategory, mood: String)] = [
             (["come", "here", "follow", "join", "过来", "跟我", "来这里"], .comeHere, "a friendly invitation"),
             (["play", "fun", "toy", "玩", "游戏", "玩耍"], .playTime, "a playful hello"),
@@ -21,22 +53,23 @@ struct PhraseTranslator {
             (["what", "who", "curious", "什么", "谁", "好奇"], .curiousAndSocial, "a curious social sound")
         ]
 
-        let matchedRule = rules.first { rule in
+        guard let matchedRule = rules.first(where: { rule in
             rule.words.contains { normalized.contains($0) }
-        }
-        let candidates: [SoundCard]
-        let mood: String
-        if let matchedRule {
-            candidates = cards.filter { $0.category == matchedRule.category }
-            mood = matchedRule.mood
-        } else {
-            candidates = cards.filter { $0.safetyTag == .gentle || $0.safetyTag == .neutral }
-            mood = "a gentle cat-sound guess"
-        }
+        }) else { return nil }
 
-        guard let card = candidates.sorted(by: { $0.sortOrder < $1.sortOrder }).first ?? cards.first else {
-            return nil
-        }
-        return PhraseTranslation(phrase: trimmed, card: card, mood: mood)
+        // Returning nil here lets the caller try the wider library instead of
+        // substituting an unrelated sound for a matched intent.
+        guard let card = cards
+            .filter({ $0.category == matchedRule.category })
+            .sorted(by: { $0.sortOrder < $1.sortOrder })
+            .first else { return nil }
+
+        return (card, matchedRule.mood)
+    }
+
+    private func gentleFallback(in cards: [SoundCard]) -> SoundCard? {
+        let safeCards = cards.filter { $0.safetyTag == .gentle || $0.safetyTag == .neutral }
+        let pool = safeCards.isEmpty ? cards : safeCards
+        return pool.sorted { $0.sortOrder < $1.sortOrder }.first
     }
 }

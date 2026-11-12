@@ -1,0 +1,91 @@
+name: iOS Build and Test (no Mac required)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: GitHub-hosted macOS runner label
+        required: false
+        default: macos-14
+        type: string
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build + unit tests on iOS Simulator
+    runs-on: ${{ inputs.runner || 'macos-14' }}
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          xcrun simctl list devices available
+
+      - name: Install XcodeGen
+        run: |
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+          xcodegen --version
+
+      - name: Generate Xcode project from project.yml
+        run: xcodegen generate
+
+      - name: Select an available iPhone simulator
+        id: simulator
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+
+          data = json.loads(subprocess.check_output(
+              ['xcrun', 'simctl', 'list', 'devices', 'available', '--json']))
+          names = {
+              device['name']
+              for runtime, devices in data['devices'].items()
+              if 'iOS' in runtime
+              for device in devices
+              if device.get('isAvailable') and device['name'].startswith('iPhone')
+          }
+
+          def version(name):
+              match = re.search(r'iPhone\s+(\d+)', name)
+              return int(match.group(1)) if match else 0
+
+          selected = max(names, key=version) if names else 'iPhone 15'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'name={selected}\n')
+          print(f'Selected simulator: {selected}')
+          PY
+
+      - name: Build for iOS Simulator (signing disabled)
+        run: |
+          xcodebuild \
+            -project MeowPlay.xcodeproj \
+            -scheme MeowPlay \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=${{ steps.simulator.outputs.name }}' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+
+      - name: Run unit tests
+        run: |
+          xcodebuild \
+            -project MeowPlay.xcodeproj \
+            -scheme MeowPlay \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=${{ steps.simulator.outputs.name }}' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            test

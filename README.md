@@ -16,12 +16,18 @@ An iOS 17 SwiftUI app for playful, clearly non-literal cat-sound interactions. T
 3. Open `MeowPlay.xcodeproj`.
 4. Select the `MeowPlay` scheme and an iOS 17+ simulator.
 
-## Xcode Cloud
+## Build and test without a Mac
 
-The repository includes `ci_scripts/ci_post_clone.sh`. Xcode Cloud runs it after
-cloning the repository so `project.yml` can generate `MeowPlay.xcodeproj` before
-the build starts. In Xcode Cloud, select the `MeowPlay` scheme and use the
-generated project for build and test workflows.
+`.github/workflows/ios-build.yml` runs on a GitHub-hosted macOS runner. It
+installs XcodeGen, generates `MeowPlay.xcodeproj` from `project.yml`, then builds
+and runs the unit tests on an iOS Simulator with code signing disabled. It needs
+no Apple Developer membership, no certificates, and no local Mac. Push to `main`
+or use the Actions tab > Run workflow, then read the build log.
+
+The repository also includes `ci_scripts/ci_post_clone.sh` for Xcode Cloud, but
+Apple requires the **first** Xcode Cloud workflow to be configured in Xcode on a
+Mac. On a Windows-only setup, use GitHub Actions for verification and TestFlight
+delivery. See `Docs/Mac-Xcode-Release-Runbook.md`.
 
 The `.xcodeproj` is generated and intentionally ignored. `project.yml` is the source of truth.
 
@@ -56,6 +62,12 @@ The native app includes a local `Cat Translator` tab. It maps common words and
 phrases to a playful sound-card choice without claiming to translate animal
 language. Input stays on the device; no speech, microphone, network, or AI
 service is required.
+
+Free users are matched against the free library first, so a suggested result is
+normally playable. When a phrase maps to a Premium-only sound, the result shows a
+lock and opens the subscription sheet instead of playing. Translator playback
+uses the same low-volume acknowledgement, five-second cooldown, and local journal
+recording as the sound library.
 
 ## Release blockers
 
