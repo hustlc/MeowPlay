@@ -89,3 +89,29 @@ jobs:
             -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO \
             test
+
+      - name: Build unsigned device IPA (no signing)
+        run: |
+          xcodebuild \
+            -project MeowPlay.xcodeproj \
+            -scheme MeowPlay \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/DeviceDerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean build
+          APP="build/DeviceDerivedData/Build/Products/Release-iphoneos/MeowPlay.app"
+          test -d "$APP" || { echo "MeowPlay.app not found"; exit 1; }
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry MeowPlay-unsigned.ipa Payload
+
+      - name: Upload unsigned IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MeowPlay-unsigned-ipa
+          path: MeowPlay-unsigned.ipa
+          if-no-files-found: error

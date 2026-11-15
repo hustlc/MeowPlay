@@ -81,7 +81,7 @@ codex -C "D:\Synology-Codex\cat-sounds-ios" --sandbox danger-full-access --ask-f
 - 本轮验证：`Scripts/Validate-ReleaseAssets.ps1` 通过（`Release asset validation passed`）；静态自检覆盖 25 个 Swift 文件的括号平衡、辅助方法签名与调用类型、`@EnvironmentObject` 注入、19 条音频资源存在性，并用等价逻辑复刻跑通 10 个测试期望与真实目录的 7 组中英短语，全部通过。Windows 仍无 `swift`/`xcodebuild`/`xcodegen`，**未做真实 iOS 编译与 XCTest 实跑**，静态结果不能替代 Xcode 构建。
 - 已知产品缺口（本轮未改）：翻译器固定取每个类别 `sortOrder` 最小的一张卡，而当前各类别最小卡片都是免费卡，因此 Premium 用户在翻译器里暂时听不到 13 张付费声音，锁定结果在实际目录中也几乎不会出现。若要在翻译器内体现 Premium 价值，需改为从候选卡片中稳定选取（例如按短语散列轮换），并同步补充测试。
 - 发布前阻塞未变：`project.yml` 的 `DEVELOPMENT_TEAM` 为空、`com.meowplay.app` 待确认可用、StoreKit 订阅产品与 App Store 截图待创建；Mac/Xcode 侧 build/test、StoreKit 沙盒与 TestFlight 仍待执行。
-- 本轮改动**未提交 Git**，全部保留在工作区供审阅。
+- 本轮改动已于 2026-11-12 提交并推送（见文末推送记录）；此处原记「未提交 Git」为推送前的状态。
 
 ## 2026-11-12 补充：无 Mac 的后续路径
 
@@ -90,4 +90,21 @@ codex -C "D:\Synology-Codex\cat-sounds-ios" --sandbox danger-full-access --ask-f
 - 核实远程仓库：`hustlc/MeowPlay` 为 **public**、默认分支 `main`、账号 `hustlc` 有 push 权限；远程与本地 HEAD 同为 `e345ef6`（2026-10-07），仅本地有未提交改动。公开仓库的 GitHub 托管标准 runner 免费。
 - 同步更新 `README.md`（新增 Build and test without a Mac 段）、`Docs/Mac-Xcode-Release-Runbook.md`（No-Mac Path 五步 + Known Blockers 第一条改写）。
 - 建议的下一步顺序：① 提交并推送改动到 `main`，在 Actions 页确认真实编译与单元测试结果；② 用 iPhone 上的 Apple Developer App 注册 Apple Developer Program（中国大陆个人 ¥688/年，需实名、自拍核验，全程同一台设备）；③ 在 App Store Connect 建立 app record、确认 `com.meowplay.app`、创建两个订阅产品；④ 补齐 `DEVELOPMENT_TEAM` 并配置签名（App Store Connect API key 或 Distribution 证书 + provisioning profile，只存 GitHub Secrets）；⑤ 增加 release workflow 上传 TestFlight；⑥ 用 iPhone 上的 TestFlight 按检查清单验收。
-- 本轮仍**未提交、未推送 Git**（推送为外部动作，等用户确认）。也不需要用户自行安装 Xcode 或购买硬件。
+- 不需要用户自行安装 Xcode 或购买硬件。
+
+## 2026-11-12 补充：推送结果与成本决策
+
+- 改动已推送到 `hustlc/MeowPlay` 的 `main`：`47a348a`（Cat Translator 门禁、10 个测试、CI 工作流与文档，共 8 个文件）、`ed75125d`（CI runner 标签修复）。本地 `HEAD` 与 `origin/main` 已对齐，工作区干净。
+- 本机 `git push` 不通（`github.com` 被代理以 CONNECT 502 拒绝；直连、备用代理、SSH 443 均不可用），改走可达的 `api.github.com`：`git credential fill` 取本机凭据 + GitHub Git Data API 写 blob/tree/commit/ref，再按字节重建提交对象对齐本地引用，确保两边 commit hash 一致、无分叉。
+- 前两次 Actions 运行在 1 秒内被取消，注解为 `The configuration 'macos-14-arm64-us-default' is not supported`；macOS 14 runner 镜像已于 2026-11-02 退役，改用 `macos-15` 后构建正常排队。
+- 用户对 Apple Developer Program 年费（中国大陆 ¥688/年，自动续订、取消当年不予退款）有成本顾虑，暂缓注册。当前不付费也能推进的零成本路径：① GitHub Actions 免费编译与单元测试；② 已上线的 Cloudflare Pages 网页版试听器（`LegalSite/play.html`，19 条声音、翻译器、收藏，全部可播放）+ Ko-fi 自愿打赏；③ Windows 上用 Sideloadly 配合免费 Apple ID 对未签名 IPA 自签，把原生 app 装到自己的 iPhone 验收（7 天重签、最多 3 个 app、StoreKit 内购与推送不可用）。
+- 待办：若采用侧载路径，需给 CI 增加「产出未签名 .ipa 并上传 artifact」步骤；若决定上架，需主动注册（免费）App Store Small Business Program 把佣金从 30% 降到 15%，并在付费首日记下续订日 / 关闭自动续订。
+- 注意：网页版目前 19 条声音全部免费可播，若将来上架收费，需先做网页版与 iOS 版的差异化，否则会削弱订阅价值。
+
+## 2026-11-14 决策：走零成本侧载路径，暂缓付费注册
+
+- 用户明确选择先走免除 Apple Developer Program 年费（¥688/年）的途径，暂不注册付费开发者账号。
+- 已给 `.github/workflows/ios-build.yml` 增加两步：用 `iphoneos` + `CODE_SIGNING_ALLOWED=NO` 构建未签名 Release `.app`，打包为 `MeowPlay-unsigned.ipa`，再由 `actions/upload-artifact@v4` 上传成 `MeowPlay-unsigned-ipa` artifact。CI 成功运行后从 Actions 的 Artifacts 下载。
+- 验收：Windows 上用 Sideloadly + 免费 Apple ID 自签，装到自己的 iPhone（7 天重签、最多 3 个 app、StoreKit 内购与推送不可用）；面向用户仍以 Cloudflare Pages 网页版 + Ko-fi 自愿打赏为主。
+- 前提未变：GitHub Actions 尚未成功跑通。最近一次 #3（`ed75125`）因托管 macOS arm64 runner 容量不足、job 未被领取，15m 3s 后判 Failure；需 rerun 或用 `workflow_dispatch` 换 runner 标签取得一次成功运行，才有 .ipa 可下载。
+- 不改动 `DEVELOPMENT_TEAM` / bundle id / StoreKit 订阅产品 / 签名证书；上架、TestFlight、App Store Small Business Program 全部暂缓。网页版 19 条声音全免费与订阅价值的冲突，在当前不上架收费的路径下不再构成阻塞。

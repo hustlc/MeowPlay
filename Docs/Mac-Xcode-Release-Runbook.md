@@ -47,6 +47,15 @@ Apple Developer Program membership is still required for signing, TestFlight,
 and App Store distribution. In mainland China an individual can enrol for
 ¥688/year from the Apple Developer app on the iPhone; no Mac is needed.
 
+If you do not want to enrol yet, use the free route instead: `ios-build.yml`
+now also produces an unsigned Release IPA and uploads it as the
+`MeowPlay-unsigned-ipa` artifact. Download it from a successful Actions run and
+use Sideloadly on Windows with a free Apple ID to sideload it onto your own
+iPhone. Free-ID signing expires after 7 days, allows at most 3 apps, and
+cannot use StoreKit purchases or push notifications. This is for personal
+verification only; it does not publish to the App Store or TestFlight, and the
+web soundboard plus Ko-fi remains the public release channel.
+
 `ci_scripts/ci_post_clone.sh` is kept for a future Xcode Cloud setup, but Apple
 requires the first Xcode Cloud workflow to be configured in Xcode on a Mac. It
 is not the primary path on a Windows-only setup. If a Mac is borrowed or rented
