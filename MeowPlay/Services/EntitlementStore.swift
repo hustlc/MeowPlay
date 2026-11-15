@@ -32,11 +32,11 @@ final class EntitlementStore: ObservableObject {
     private var hasStarted = false
 
     init(
-        client: SubscriptionClient = StoreKitSubscriptionClient(),
+        client: SubscriptionClient? = nil,
         defaults: UserDefaults = .standard,
         now: @escaping () -> Date = Date.init
     ) {
-        self.client = client
+        self.client = client ?? StoreKitSubscriptionClient()
         self.defaults = defaults
         self.now = now
         restoreValidSnapshot()
